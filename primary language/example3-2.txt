@@ -1,0 +1,16 @@
+;一位理发师
+;顾客到达16+-9
+;理发时间15+-7
+;服务20个
+;估算理发师利用率和顾客平均等待时间
+	GENERATE	16,9
+	QUEUE		1
+	SEIZE		1
+	DEPART		1
+	ADVANCE	15,7
+	RELEASE		1
+	TERMINATE	1
+	START		20
+;利用率在FACILITY里
+;平均等待时间在QUEUE里
+;例3.3求顾客平均逗留时间只需释放设施后再DEPART离开队列即可

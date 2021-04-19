@@ -1,0 +1,11 @@
+;加工一个零件5
+;由其中一个检查员检查质量（有无限个（时间3+-4
+;10%废品率
+;估算多少时间才能生产1000个
+	GENERATE	5
+	ADVANCE	4,3
+	TRANSFER	.1,ACC,REJ
+ACC	TERMINATE	1
+REJ	TERMINATE	
+	START		1000
+;从仿真结束时间END TIME可以看出

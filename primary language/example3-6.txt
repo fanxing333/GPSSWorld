@@ -1,0 +1,22 @@
+;1洗头
+;1理发师
+;顾客到达28+-20
+;洗头20+-10
+;理发24+-15
+;仿真1000个
+;求洗头和理发利用率
+	GENERATE	28,20
+	QUEUE		Q_XT
+	SEIZE		S_XT
+	DEPART		Q_XT
+	ADVANCE	20,10
+	RELEASE		S_XT
+	QUEUE		Q_LF
+	SEIZE		S_LF
+	DEPART		Q_LF
+	ADVANCE	24,15
+	RELEASE		S_LF
+	TERMINATE	1
+	START		1000
+
+;不需要求排队时间可以把队列删除，结果一样

@@ -1,0 +1,16 @@
+;考虑仿真预热
+;一位理发师
+;顾客到达16+-9
+;理发时间15+-7
+;估算理发师利用率和顾客平均等待时间
+;先仿真预热5个顾客;服务20个
+	GENERATE	16,9
+	QUEUE		1
+	SEIZE		1
+	DEPART		1
+	ADVANCE	15,7
+	RELEASE		1
+	TERMINATE	1
+	START		5,NP	;NP（不打印输出）或缺省
+	RESET
+	START		20
