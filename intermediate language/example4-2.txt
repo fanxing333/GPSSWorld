@@ -1,0 +1,24 @@
+;一位理发师
+;顾客16+-9到达
+;服务时间15+-7
+;理发店营业8*60
+;关门前要服务完最后一名
+	
+		GENERATE	16.9
+		QUEUE		Q_BAR
+ADD_JR		SEIZE		F_BAR
+		DEPART		Q_BAR
+		ADVANCE	15,7
+ADD_DONE	RELEASE		F_BAR
+		TERMINATE	
+		GENERATE	480,,,,2
+		SEIZE		F_BAR
+		RELEASE		F_BAR
+		TERMINATE	1
+		START		1
+
+;关门前要服务完队列中所有人
+
+		INITIAL		LS1
+		GENERATE	16,9
+		GATE LS		1,OUT
