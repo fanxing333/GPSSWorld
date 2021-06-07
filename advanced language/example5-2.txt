@@ -1,0 +1,51 @@
+;一个港口
+;船只以下面连续分布的时间间隔到达港口，然后开始卸货，卸完离港
+;30%的船只是新船只，需要用高速卸货设备，停在第一卸货区，有两个泊位，卸货时间为1+-0.1天
+;旧型船只停在第二卸货区，有6个泊位，卸货时间为1.5+-0.2天
+;船只开始和结束时需要拖轮，拖轮数与时间的关系
+;船只到达港口的时间分布情况
+;125	175	225	275	325	375	425	475
+;0	0.1	0.22	0.4	0.55	0.78	0.9	1
+
+;1.分别求得新旧两种类型船只在港口中的等待泊位的时间分布，仿真时间控制在100条船离开港口，港口初始状态没有船只
+;2.分别求得新旧两种类型船只等待拖轮总时间（即拖进泊位时间和从泊位拖出时间之和）的分布情况
+
+FN_1		FUNCTION	RN1,C8
+0,125/0.1,175/0.22,225/0.4,275/0.55,325/0.78,375/0.9,425/1,475
+
+S_B1		STORAGE	2
+S_B2		STORAGE	6
+S_TOW		STORAGE	3
+T_NEWSHIP	QTABLE		Q_B1,0,100,20
+T_OLDSHIP	QTABLE		Q_B2,0,100,20
+		GENERATE	FN$FN_1
+		TRANSFER	0.7,,ADD_OLD
+		QUEUE		Q_B1
+		GATE SNF	S_B1
+		DEPART		Q_B1
+		TEST GE		R$S_TOW,2
+		ENTER		S_B1
+		ENTER		S_TOW,2
+		ADVANCE	30
+		LEAVE		S_TOW,2
+		ADVANCE	1440,144
+		ENTER		S_TOW
+		ADVANCE	20
+		LEAVE		S_TOW
+		LEAVE		S_B1
+		TERMINATE	1
+ADD_OLD	QUEUE		Q_B2
+		GATE SNF	S_B2
+		DEPART		Q_B2
+		TEST GE		R$S_TOW,3
+		ENTER		S_B2
+		ENTER		S_TOW,3
+		ADVANCE	45
+		LEAVE		S_TOW,3
+		ADVANCE	2160,288
+		ENTER		S_TOW,2
+		ADVANCE	25
+		LEAVE		S_TOW,2
+		LEAVE		S_B2
+		TERMINATE	1
+		START		100

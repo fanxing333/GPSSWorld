@@ -1,0 +1,32 @@
+;顾客订单以均值为15分钟的指数分布到达
+;订单到达后，如满足订单的订货数量则马上可以进行发货
+;时间为每份订单2分钟外加1分钟乘以订单中货物数量
+;制造部门以每40+-5分钟的速率生产批量为60的货物
+;期初库存为1000
+;每份订单的订货数量及频率关系如下图所示
+;0.1	0.25	0.30	0.15	0.12	0.05	0.03
+;6	12	18	24	30	36	48
+;仿真运行10天，提供每份订单平均处理时间
+
+REQ		FUNCTION	RN2,D7
+0.1,6/0.35,12/0.65,18/0.8,24/0.92,30/0.97,36/1,48
+STOCK		STORAGE	4000
+		
+		GENERATE	(EXPONENTIAL(1,0,15))
+		ASSIGN		1,FN$REQ
+		QUEUE		1
+		TEST GE		S$STOCK,P1
+		LEAVE		STOCK,P1
+		ADVANCE	(2+P1)
+		DEPART		1
+		TERMINATE
+
+		GENERATE	,,,1
+		ENTER		STOCK,1000
+		TERMINATE	
+		GENERATE	40,5
+		ENTER		STOCK,60
+		TERMINATE	
+		GENERATE	1440
+		TERMINATE	1
+		START		1

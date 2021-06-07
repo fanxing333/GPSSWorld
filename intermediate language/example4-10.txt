@@ -1,0 +1,20 @@
+;一个理发店有ABC三位理发师
+;顾客到达过程服从均值为8的泊松过程
+;ABC三位理发师的理发速率分别为16，18，20（服从指数分布）
+;顾客到达优先选择空闲的，若有多个空闲则A》B》C
+;1.如果到达时没有理发师空闲则离开
+;2.没有空闲的理发师则排队等待
+
+TIME	FUNCTION	P1,D3
+1,16/2,18/3,20
+	
+	GENERATE	(EXPONENTIAL(1,0,8))
+	TEST E		(F1#F2#F3),0
+	SELECT NU	1,1,3,,,OUT
+	SEIZE		P1
+	ADVANCE	(EXPONENTIAL(1,0,FN$TIME))
+	RELEASE		P1
+OUT	TERMINATE	
+	GENERATE	60
+	TERMINATE	1
+	START		100

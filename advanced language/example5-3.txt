@@ -1,0 +1,38 @@
+;某站来一辆汽车15+-1
+;汽车内30个座位
+;汽车到站时车上一般已经有30+-20个乘客
+;每次下车大约有4+-3人
+;欲上车的乘客到达汽车站的时间间隔呈指数分布，均值为24s
+;到站时车内无座位则离开
+;上满或无人下车时就离开车站
+;每个乘客的下车时间10+-2	上车时间15+-5	先下车后上车
+;仿真100量汽车到站的情况，用表格统计由于每辆车车内客满而离开的乘客人数分布
+
+TAB1	TABLE		X1,0,10,20
+	GENERATE	(EXPONENTIAL(1,0,24))
+	QUEUE		1
+	GATE LS		DOOR
+	DEPART		1
+	TEST L		X2,30,GOA
+	SAVEVALUE	2+,1
+	SEIZE		1
+GETON	ADVANCE	15,5
+	RELEASE		1
+	TERMINATE	
+GOA	SAVEVALUE	1+,1
+	TERMINATE
+
+	GENERATE	900,60
+	SAVEVALUE	2,(10+RN1@41)
+	ASSIGN		1,(1+RN2@7)
+NXT	ADVANCE	10,2
+	SAVEVALUE	2-,1
+	LOOP		1,NXT
+	LOGIC S		DOOR
+	TEST LE		Q1,0
+	TEST E		W$GETON,0
+	TABULATE	TAB1
+	SAVEVALUE	1,0
+	LOGIC R		DOOR
+	TERMINATE	1
+	START		100

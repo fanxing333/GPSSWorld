@@ -1,0 +1,21 @@
+;一位理发师
+;速度到达16+-9
+;理发时间15+-7
+;营业时间8h
+;停止营业之前进入理发店的都要服务完
+
+		INITIAL		LS1
+		GENERATE	16,9
+		GATE LS		1,OUT			;不满足则去OUT
+ADD_JR		QUEUE		Q_BAR
+		SEIZE		F_BAR
+		DEPART		Q_BAR
+		ADVANCE	15,7
+ADD_DONE	RELEASE		F_BAR
+		TERMINATE	
+OUT		TERMINATE	
+		GENERATE	480
+		LOGIC R		1			;R：关闭开关S：打开开关I：开关置反
+		TEST E		N$ADD_JR,N$ADD_DONE	;返回进入两个模块的实体总数，如果相等就说明进入队列的人和离开理发师的人一样多
+		TERMINATE	1	
+		START		1
