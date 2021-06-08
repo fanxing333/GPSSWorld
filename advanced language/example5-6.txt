@@ -1,0 +1,18 @@
+;最短作业优先
+;零件到达时间间隔16+-10
+;零件加工时间15+-10
+;仿真100个
+
+FN_JGSJ		FUNCTION	RN1,C2
+0,10/1,25
+		
+		GENERATE	16,10,,,2
+		ASSIGN		1,FN$FN_JGSJ
+		LINK		QUE,P1,ADD_NEXT			;自定义名称，从小打到排序的属性，（若为OFF状态，直接去该地址，状态改为ON）
+ADD_NEXT	SEIZE		1
+		PRIORITY		1,BU
+		ADVANCE	P1
+		RELEASE		1
+		UNLINK		QUE,ADD_NEXT,1			;用户链号，被取出的活动实体去往下一个地址，可取出的最大数量
+		TERMINATE	1
+		START		100

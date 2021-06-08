@@ -1,0 +1,29 @@
+;收到一份订单后的流程
+;订单到达时间间隔24+-8
+;通知并等待客户汇来款项30+-8 （无资源约束）
+;准备货物18+-6
+;都完成后办理登账开票手续20+-8
+;包装发货15+-5
+;模拟1000份
+;订单的时间分布情况
+
+TIME		TABLE		M1,50,50,10		;M1,统计实体在系统中的拘留时间
+		GENERATE	24,8
+		SPLIT		1,ADD_PRE
+		ADVANCE	30,8
+ADD1		MATCH		ADD2			;等待ADD2完成
+		SEIZE		SAL
+		ADVANCE	20,8
+		RELEASE		SAL
+ADD_OUT	ASSEMBLE	2
+		TABULATE	TIME			;对表格参数进行统计
+		TERMINATE	1
+ADD_PRE		SEIZE		PRD
+		ADVANCE	18,6
+		RELEASE		PRD
+ADD2		MATCH		ADD1			;等待ADD1完成
+		SEIZE		SHP
+		ADVANCE	15,5
+		RELEASE		SHP
+		TRANSFER	,ADD_OUT
+		START		1000
